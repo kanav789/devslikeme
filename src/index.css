@@ -1,1 +1,18 @@
 @import "tailwindcss";
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* White background with a subtle highlighted gradient at the top */
+body {
+  background: linear-gradient(
+      180deg,
+      rgba(0, 128, 255, 0.08) 0%,   /* light blue highlight */
+      rgba(0, 128, 255, 0) 200px    /* fades to transparent */
+    ),
+    #ffffff; /* base background */
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* stays in place on scroll */
+  color: #111; /* text stays readable */
+}
