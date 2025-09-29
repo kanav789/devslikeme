@@ -1,6 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { BrushContext } from "../context/BrushContext";
 import Navbar from "./Navbar";
+import { Share } from "../utils/icon/icons";
 
 const WhiteBoard = () => {
   const canvasRef = useRef(null);
@@ -41,6 +42,29 @@ const WhiteBoard = () => {
     setIsDrawing(false);
   };
 
+  const downloadcanvas =() =>{
+ const canvas = canvasRef.current;
+
+
+  // Create a temporary canvas to preserve original
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = canvas.width;
+  tempCanvas.height = canvas.height;
+  const tempCtx = tempCanvas.getContext("2d");
+
+  // Fill white background
+  tempCtx.fillStyle = "white";
+  tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+  // Draw original canvas on top
+  tempCtx.drawImage(canvas, 0, 0);
+
+  const link = document.createElement("a");
+    link.href = tempCanvas.toDataURL("image/png")
+    link.download = "whiteboard.png"
+    link.click();
+  }
+
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Navbar */}
@@ -58,9 +82,22 @@ const WhiteBoard = () => {
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
+            
           />
         </div>
       </div>
+
+
+      {/*  export  */}
+      <div className="absolute bottom-7 right-10 space-y-4">
+        <button
+          className="bg-black rounded-full w-12 h-12 text-white text-2xl flex items-center justify-center hover:bg-gray-800 transition"
+          onClick={() => downloadcanvas()}
+        >
+          <Share/>
+        </button>
+      </div>
+      
     </div>
   );
 };
