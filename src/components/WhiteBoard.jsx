@@ -1,44 +1,68 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
+import { BrushContext } from "../context/BrushContext";
+import Navbar from "./Navbar";
 
-const WhiteBoard =()=>{
+const WhiteBoard = () => {
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [lastPos, setLastPos] = useState({ x: 0, y: 0 });
 
-    const canavaref =useRef()
-    const ctx = canavaref.current?.getContext("2d")
-    const [isDrawing,setIsDrawing]=useState(false)
-    const [lastX,setLastX]=useState({x:0,y:0})
-    const color ="black"
-    const startdrawing=(e)=>{
-      setIsDrawing(true)
-      setLastX({x:e.nativeEvent.offsetX,y:e.nativeEvent.offsetY})
-    }
+  const { brush, color, eraser } = useContext(BrushContext);
 
-    const draw=(e)=>{
-        if(!isDrawing) return;
-        const x =e.nativeEvent.offsetX
-        const y =e.nativeEvent.offsetY
-      ctx.beginPath()
-      ctx.lineWidth=2
-      ctx.moveTo(lastX.x,lastX.y)
-      ctx.lineTo(x,y)
-      ctx.strokeStyle={color}
-        ctx.stroke()
+  const startDrawing = (e) => {
+    setIsDrawing(true);
+    setLastPos({
+      x: e.nativeEvent.offsetX,
+      y: e.nativeEvent.offsetY,
+    });
+  };
 
-        setLastX({x,y})
+  const draw = (e) => {
+    if (!isDrawing) return;
 
-    }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
 
-    const stopdrawing=()=>{  
-        setIsDrawing(false) 
-    }
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
 
-    return(
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1>WhiteBoard</h1>
-     <canvas width={500} height={500} className="border" ref={canavaref}  onMouseMove={(e)=>{draw(e)}} onMouseDown={startdrawing} onMouseUp={stopdrawing}/>
+    ctx.beginPath();
+    ctx.lineWidth = eraser ? 50 : brush;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = eraser ? "white" : color;
+    ctx.moveTo(lastPos.x, lastPos.y);
+    ctx.lineTo(x, y);
+    ctx.stroke();
 
+    setLastPos({ x, y });
+  };
 
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+
+  return (
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Canvas Area */}
+      <div className="flex flex-1 items-center justify-center p-4">
+        <div className="bg-white shadow-2xl rounded-2xl p-4">
+          <canvas
+            ref={canvasRef}
+            width={1200}
+            height={600}
+            className="border border-gray-300 rounded-lg cursor-crosshair"
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseLeave={stopDrawing}
+          />
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
 export default WhiteBoard;

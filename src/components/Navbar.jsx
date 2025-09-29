@@ -1,41 +1,56 @@
-import { useContext, useEffect } from "react";
-import { Brush } from "../utils/icon/icons";
+import { useContext } from "react";
+import { Eraser } from "../utils/icon/icons";
 import { BrushContext } from "../context/BrushContext";
 
-const Navbar =() =>{
+const Navbar = () => {
+  const { setbrush, setColor, setEraser } = useContext(BrushContext);
 
-    const {brush, setbrush, color, setColor} =useContext(BrushContext)
-      
-    useEffect(()=>{
+  return (
+    <div className="flex items-center justify-between h-20 bg-white text-black w-full max-w-[900px] m-auto mt-5 px-6 rounded-xl shadow-lg py-6">
+      {/* Title */}
+      <h1 className="font-bold text-xl tracking-wide">FreeHand</h1>
 
-        setbrush("simple")
-        setColor("black")
-    }, [])
-     
+   
 
+      {/* Color Picker + Brush Sizes */}
+      <div className="flex items-center gap-4">
+        {/* Color Picker */}
+        <input
+          type="color"
+          className="w-8 h-8 cursor-pointer rounded-md overflow-hidden border border-gray-300"
+          onChange={(e) => setColor(e.target.value)}
+        />
 
-    console.log(brush,color ,"navbar")
-    return(
-        <div className="flex items-center justify-center h-20  text-white width-full max-w-[700px] m-auto mt-5 rounded-xl shadow-xl">
-
-        <div className="flex justify-between items-center w-full px-5">
-            <h1 className="text-black font-bold text-lg ">WhiteBoard</h1>
-             
-             <div>
-                <button>
-                    <Brush/>
-                </button>
-
-                
-             </div>
- 
- 
-
-            </div> 
-        
-
+        {/* Quick Brush Sizes */}
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={() => {setbrush(2); setEraser(false)}}
+            className="w-6 h-6 rounded-full bg-gray-700 hover:ring-2 hover:ring-gray-400"
+            title="Small"
+          ></button>
+          <button
+            onClick={() => {setbrush(8); setEraser(false)}}
+            className="w-8 h-8 rounded-full bg-gray-700 hover:ring-2 hover:ring-gray-400"
+            title="Medium"
+          ></button>
+          <button
+            onClick={() => {setbrush(14); setEraser(false)}}
+            className="w-10 h-10 rounded-full bg-gray-700 hover:ring-2 hover:ring-gray-400"
+            title="Large"
+          ></button>
         </div>
-    )
-}
+
+        <button
+       className="p-2 rounded-lg hover:bg-gray-100 transition"
+       onClick={() => setEraser(true) }
+       title="Eraser"
+       >
+  <Eraser className="w-7 h-7 text-gray-700" />
+</button>
+
+      </div>
+    </div>
+  );
+};
 
 export default Navbar;
