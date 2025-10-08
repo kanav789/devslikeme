@@ -66,39 +66,50 @@ const WhiteBoard = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      {/* Navbar */}
-      <Navbar />
+   <div className="h-screen flex flex-col bg-gray-50 relative">
+  {/* Navbar */}
+  <Navbar />
 
-      {/* Canvas Area */}
-      <div className="flex flex-1 items-center justify-center p-4">
-        <div className="bg-white shadow-2xl rounded-2xl p-4">
-          <canvas
-            ref={canvasRef}
-            width={1200}
-            height={600}
-            className="border border-gray-300 rounded-lg cursor-crosshair"
-            onMouseDown={startDrawing}
-            onMouseMove={draw}
-            onMouseUp={stopDrawing}
-            onMouseLeave={stopDrawing}
-            
-          />
-        </div>
-      </div>
+  {/* Grid Background Pattern */}
+  <div
+    className="absolute inset-0 z-0 pointer-events-none"
+    style={{
+      backgroundImage: `
+        repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(75, 85, 99, 0.06) 5px, rgba(75, 85, 99, 0.06) 6px, transparent 6px, transparent 15px),
+        repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(75, 85, 99, 0.06) 5px, rgba(75, 85, 99, 0.06) 6px, transparent 6px, transparent 15px),
+        repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(107, 114, 128, 0.04) 10px, rgba(107, 114, 128, 0.04) 11px, transparent 11px, transparent 30px),
+        repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(107, 114, 128, 0.04) 10px, rgba(107, 114, 128, 0.04) 11px, transparent 11px, transparent 30px)
+      `,
+    }}
+  />
 
-
-      {/*  export  */}
-      <div className="absolute bottom-7 right-10 space-y-4">
-        <button
-          className="bg-black rounded-full w-12 h-12 text-white text-2xl flex items-center justify-center hover:bg-gray-800 transition"
-          onClick={() => downloadcanvas()}
-        >
-          <Share/>
-        </button>
-      </div>
-      
+  {/* Canvas Area */}
+  <div className="flex flex-1 items-center justify-center p-4 relative z-10">
+    <div className="bg-white shadow-2xl rounded-2xl p-6" 
+    >
+      <canvas
+        ref={canvasRef}
+        width={1200}
+        height={600}
+        className="border border-gray-300 rounded-lg cursor-crosshair"
+        onMouseDown={startDrawing}
+        onMouseMove={draw}
+        onMouseUp={stopDrawing}
+        onMouseLeave={stopDrawing}
+      />
     </div>
+  </div>
+
+  {/* Export Button */}
+  <div className="absolute bottom-7 right-10 z-20">
+    <button
+      className="bg-black rounded-full w-12 h-12 text-white text-2xl flex items-center justify-center hover:bg-gray-800 transition shadow-lg"
+      onClick={() => downloadcanvas()}
+    >
+      <Share />
+    </button>
+  </div>
+</div>
   );
 };
 
